@@ -47,7 +47,7 @@ python RobloxStudio.py
 ## Build EXE
 
 ```bash
-pyinstaller --onefile --noconsole RobloxStudio.py
+pyinstaller --onefile --noconsole "Roblox Studio Discord RPC.py"
 ```
 
 The executable will be generated in the `dist` folder.
