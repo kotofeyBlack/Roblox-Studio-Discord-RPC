@@ -1,40 +1,44 @@
 # Roblox Studio Discord RPC
 
-A lightweight Discord Rich Presence application for Roblox Studio.
+🚀 Display your Roblox Studio activity directly in Discord Rich Presence.
 
-This project automatically updates your Discord status while developing in Roblox Studio, displaying the currently opened project and development session time.
+Roblox Studio Discord RPC automatically detects your currently opened Roblox Studio project and updates your Discord status in real time.
 
 ## Features
 
 * 🎮 Discord Rich Presence integration
-* 📁 Automatically detects the current Roblox Studio project
-* ⏱️ Tracks development session time
-* 🚀 Lightweight and easy to use
+* 📁 Automatic project detection
+* ⏱️ Session time tracking
+* 🖥️ Lightweight background application
+* ⚡ Fast and simple setup
 * 🔄 Automatic status updates
-* 🖥️ Runs in the background
 
-## Requirements
+## Preview
 
-* Windows
-* Python 3.10+
-* Discord Desktop App
-* Roblox Studio
+Discord Status:
+
+Developing a Roblox Experience
+
+Project: My Awesome Game
+
+Elapsed Time: 2h 15m
 
 ## Installation
 
-1. Clone the repository:
+### Requirements
 
-```bash
-git clone https://github.com/yourname/Roblox-Studio-Discord-RPC.git
-```
+* Windows 10/11
+* Discord Desktop
+* Roblox Studio
+* Python 3.10+
 
-2. Install dependencies:
+### Install Dependencies
 
 ```bash
 pip install pypresence pywin32 psutil
 ```
 
-3. Run the application:
+### Run
 
 ```bash
 python RobloxStudio.py
@@ -46,16 +50,20 @@ python RobloxStudio.py
 pyinstaller --onefile --noconsole RobloxStudio.py
 ```
 
-The executable will be created in the `dist` folder.
+The executable will be generated in the `dist` folder.
 
-## Discord Status Example
+## How It Works
 
-Developing a Roblox Experience
+The application detects Roblox Studio windows and automatically updates Discord Rich Presence with:
 
-Project: My Awesome Game
-
-Elapsed Time: 1h 24m
+* Current project name
+* Development status
+* Session duration
 
 ## License
 
 MIT License
+
+## Author
+
+Created by Kotofey Black.
