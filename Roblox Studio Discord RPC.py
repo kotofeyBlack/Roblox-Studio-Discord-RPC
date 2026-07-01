@@ -31,15 +31,18 @@ def get_project_name():
 
         title = win32gui.GetWindowText(hwnd)
 
-        if title.endswith(" - Roblox Studio"):
+        if title == "Roblox Studio" or title.endswith(" - Roblox Studio"):
             windows.append(title)
 
     win32gui.EnumWindows(enum_handler, None)
 
     for title in windows:
-        project = title.replace(" - Roblox Studio", "").strip()
+        if title == "Roblox Studio":
+            return "IDLE_MENU"
 
-        if project:
+        if title.endswith(" - Roblox Studio"):
+            raw_title = title.replace(" - Roblox Studio", "").strip()
+            project = raw_title.split(" - ")[0].strip()
             return project
 
     return None
@@ -57,7 +60,16 @@ while True:
 
         project = get_project_name()
 
-        if project:
+        if project == "IDLE_MENU":
+            rpc.update(
+                details="Roblox Studio",
+                state="Browsing Projects",
+                large_image="robloxstudio",
+                large_text="Roblox Studio"
+            )
+            current_project = "" 
+
+        elif project:
             if project != current_project:
                 current_project = project
                 start_time = int(time.time())
@@ -72,7 +84,7 @@ while True:
         else:
             rpc.update(
                 details="Roblox Studio",
-                state="Editing Project",
+                state="Loading...",
                 large_image="robloxstudio",
                 large_text="Roblox Studio"
             )
