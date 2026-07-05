@@ -1,21 +1,28 @@
 import time
-import win32gui
+
 import psutil
+import win32gui
 from pypresence import Presence
 
 CLIENT_ID = "1516783637633306645"
+UPDATE_INTERVAL = 10
 
-rpc = Presence(CLIENT_ID)
-rpc.connect()
 
-current_project = ""
-start_time = int(time.time())
+def connect_rpc():
+    while True:
+        try:
+            client = Presence(CLIENT_ID)
+            client.connect()
+            return client
+        except Exception:
+            time.sleep(5)
 
 
 def is_roblox_studio_running():
     for proc in psutil.process_iter(["name"]):
         try:
-            if proc.info["name"] and proc.info["name"].lower() == "robloxstudiobeta.exe":
+            name = proc.info["name"]
+            if name and name.lower() == "robloxstudiobeta.exe":
                 return True
         except Exception:
             pass
@@ -30,7 +37,6 @@ def get_project_name():
             return
 
         title = win32gui.GetWindowText(hwnd)
-
         if title == "Roblox Studio" or title.endswith(" - Roblox Studio"):
             windows.append(title)
 
@@ -42,20 +48,30 @@ def get_project_name():
 
         if title.endswith(" - Roblox Studio"):
             raw_title = title.replace(" - Roblox Studio", "").strip()
-            project = raw_title.split(" - ")[0].strip()
-            return project
+            return raw_title.split(" - ")[0].strip()
 
     return None
+
+
+rpc = connect_rpc()
+current_project = ""
+start_time = int(time.time())
+presence_visible = False
 
 
 while True:
     try:
         if not is_roblox_studio_running():
-            rpc.update(
-                details="Roblox Studio",
-                state="Not Open"
-            )
-            time.sleep(10)
+            if presence_visible:
+                try:
+                    rpc.clear()
+                except Exception:
+                    rpc = connect_rpc()
+                presence_visible = False
+
+            current_project = ""
+            start_time = int(time.time())
+            time.sleep(UPDATE_INTERVAL)
             continue
 
         project = get_project_name()
@@ -65,9 +81,11 @@ while True:
                 details="Roblox Studio",
                 state="Browsing Projects",
                 large_image="robloxstudio",
-                large_text="Roblox Studio"
+                large_text="Roblox Studio",
             )
-            current_project = "" 
+            current_project = ""
+            start_time = int(time.time())
+            presence_visible = True
 
         elif project:
             if project != current_project:
@@ -79,17 +97,24 @@ while True:
                 state=current_project,
                 large_image="robloxstudio",
                 large_text="Roblox Studio",
-                start=start_time
+                start=start_time,
             )
+            presence_visible = True
+
         else:
             rpc.update(
                 details="Roblox Studio",
                 state="Loading...",
                 large_image="robloxstudio",
-                large_text="Roblox Studio"
+                large_text="Roblox Studio",
             )
+            presence_visible = True
 
-        time.sleep(10)
+        time.sleep(UPDATE_INTERVAL)
 
     except Exception:
-        time.sleep(10)
+        try:
+            rpc = connect_rpc()
+        except Exception:
+            pass
+        time.sleep(UPDATE_INTERVAL)
